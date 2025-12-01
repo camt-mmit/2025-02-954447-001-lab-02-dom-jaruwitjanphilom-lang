@@ -1,8 +1,8 @@
 /**
- * Create input-list component.
+ * Create input-list component for a SINGLE section.
+ * (ฟังก์ชันนี้จัดการ Logic ภายในแต่ละ Section: การบวกเลข, เพิ่ม/ลบ Input)
  *
  * @param {HTMLElement} componentElem
- *
  * @returns {HTMLElement}
  */
 export function createComponent(componentElem) {
@@ -19,17 +19,19 @@ export function createComponent(componentElem) {
   }
 
   const regenerateTitleNumbersAndStatus = () => {
-    [...inputListContainer.querySelectorAll(".app-cmp-number")].forEach(
-      (inputContainer, index, items) => {
-        [...inputContainer.querySelectorAll(".app-title-number")].forEach(
-          (elem) => (elem.textContent = `${index + 1}`)
-        );
+    const listItems = [
+      ...inputListContainer.querySelectorAll(".app-cmp-number"),
+    ];
 
-        [
-          ...inputContainer.querySelectorAll(".app-cmd-remove-number-input"),
-        ].forEach((elem) => (elem.disabled = items.length === 1));
-      }
-    );
+    listItems.forEach((inputContainer, index, items) => {
+      [...inputContainer.querySelectorAll(".app-title-number")].forEach(
+        (elem) => (elem.textContent = `${index + 1}`)
+      );
+
+      [
+        ...inputContainer.querySelectorAll(".app-cmd-remove-number-input"),
+      ].forEach((elem) => (elem.disabled = items.length === 1));
+    });
   };
 
   const recalculateResult = () => {
@@ -51,28 +53,26 @@ export function createComponent(componentElem) {
       templateElem.content.cloneNode(true).firstElementChild;
 
     inputContainer.addEventListener("click", (ev) => {
-      if (ev.target?.matches(".app-cmd-remove-number-input") ?? false) {
+      if (ev.target.closest(".app-cmd-remove-number-input")) {
         inputContainer.remove();
-
         regenerateTitleNumbersAndStatus();
         recalculateResult();
       }
     });
 
     inputListContainer.append(inputContainer);
-
     regenerateTitleNumbersAndStatus();
     recalculateResult();
   };
 
-  inputListContainer.addEventListener("change", (ev) => {
-    if (ev.target?.matches(".app-inp-number") ?? false) {
+  inputListContainer.addEventListener("input", (ev) => {
+    if (ev.target.matches(".app-inp-number")) {
       recalculateResult();
     }
   });
 
   componentElem.addEventListener("click", (ev) => {
-    if (ev.target?.matches(".app-cmd-add-number-input")) {
+    if (ev.target.closest(".app-cmd-add-number-input")) {
       createInputComponent();
     }
   });
@@ -81,3 +81,46 @@ export function createComponent(componentElem) {
 
   return componentElem;
 }
+
+function initApp() {
+  const addSectionBtn = document.querySelector("#app-cmd-add-section");
+  const sectionContainer = document.querySelector("#app-section-container");
+  const sectionTemplate = document.querySelector("#app-tmp-section");
+
+  if (!addSectionBtn || !sectionContainer || !sectionTemplate) {
+    console.warn("Main app elements not found (Check HTML)");
+    return;
+  }
+
+  const regenerateSectionTitles = () => {
+    const sections = sectionContainer.querySelectorAll(".app-cmp-section");
+    sections.forEach((sec, index) => {
+      const title = sec.querySelector(".app-section-title-number");
+      if (title) title.textContent = index + 1;
+    });
+  };
+
+  const createNewSection = () => {
+    const clone = sectionTemplate.content.cloneNode(true).firstElementChild;
+
+    const removeBtn = clone.querySelector(".app-cmd-remove-section");
+    if (removeBtn) {
+      removeBtn.addEventListener("click", () => {
+        clone.remove();
+        regenerateSectionTitles();
+      });
+    }
+
+    sectionContainer.append(clone);
+
+    createComponent(clone);
+
+    regenerateSectionTitles();
+  };
+
+  addSectionBtn.addEventListener("click", createNewSection);
+
+  createNewSection();
+}
+
+document.addEventListener("DOMContentLoaded", initApp);
