@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
+    <link rel="stylesheet" href="./js/public/css/dom.css" />
+
+    <script type="module" src="./js/section-list-component.js"></script>
+
+    <title>Lab Section</title>
+  </head>
+  <body>
+    <a
+      href="index.html"
+      style="display: flex; padding: 10px; justify-content: center"
+      >Back</a
+    >
+    <hr style="margin-bottom: 2em" />
+
+    <div style="display: flex; justify-content: center; margin-bottom: 20px">
+      <button
+        type="button"
+        class="app-cl-btn app-cl-primary"
+        id="app-cmd-add-section"
+      >
+        <i class="material-symbols-outlined">library_add</i> Section
+      </button>
+    </div>
+
+    <div
+      id="app-section-container"
+      class="app-cl-column-container"
+      style="gap: 20px"
+    ></div>
+
+    <template id="app-tmp-section">
+      <article
+        class="app-cmp-section"
+        style="border-bottom: 1px solid #ccc; padding-bottom: 20px"
+      >
+        <header
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+          "
+        >
+          <button
+            type="button"
+            class="app-cl-btn app-cl-primary app-cmd-add-number-input"
+          >
+            <i class="material-symbols-outlined">add</i> Input
+          </button>
+
+          <h1 style="margin: 0">
+            Section <span class="app-section-title-number"></span>
+          </h1>
+
+          <button
+            type="button"
+            class="app-cl-btn app-cl-warn app-cl-icon app-cmd-remove-section"
+          >
+            <i class="material-symbols-outlined">delete_forever</i>
+          </button>
+        </header>
+
+        <hr style="border-top: 1px solid #000; margin-bottom: 1rem" />
+
+        <div class="app-cl-column-container">
+          <section class="app-cmp-number-list">
+            <template class="app-tmp-number-component">
+              <div class="app-cmp-number">
+                <label>
+                  <b>Number <span class="app-title-number"></span> ::</b>
+                  <input type="number" class="app-inp-number" value="0" />
+                </label>
+                <button
+                  type="button"
+                  class="app-cl-btn app-cl-warn app-cl-icon app-cmd-remove-number-input"
+                >
+                  <i class="material-symbols-outlined">delete_forever</i>
+                </button>
+              </div>
+            </template>
+          </section>
+          <section>
+            <div class="app-cmp-number">
+              <label>
+                <b>Result ::</b>
+                <output
+                  class="app-cl-number app-out-number"
+                  style="
+                    padding-right: calc(5ch + 3px);
+                    text-decoration: underline double;
+                  "
+                  >0</output
+                >
+              </label>
+            </div>
+          </section>
+        </div>
+      </article>
+    </template>
+  </body>
+</html>
